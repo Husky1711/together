@@ -1,0 +1,12 @@
+{
+  "name": "Our Love Story",
+  "short_name": "Love Story",
+  "description": "A personalized Valentine's Day experience",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF8F6",
+  "theme_color": "#F4A6C1",
+  "orientation": "portrait",
+  "icons": []
+}
+

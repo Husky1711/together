@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Icon Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+            background: linear-gradient(135deg, #F4A6C1 0%, #E8979D 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+        }
+        h1 {
+            color: #2C2C2C;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        p {
+            color: #6B6B6B;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .controls {
+            background: #FFF8F6;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #F4A6C1;
+        }
+        .control-group {
+            margin-bottom: 15px;
+        }
+        .control-group label {
+            display: block;
+            color: #2C2C2C;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .control-group input,
+        .control-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #F4A6C1;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .control-group input[type="color"] {
+            height: 50px;
+            cursor: pointer;
+        }
+        .canvas-container {
+            display: flex;
+            gap: 30px;
+            margin: 30px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .canvas-wrapper {
+            text-align: center;
+        }
+        canvas {
+            border: 3px solid #F4A6C1;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: block;
+            background: white;
+        }
+        .canvas-label {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #6B6B6B;
+            font-weight: 600;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        button {
+            background: linear-gradient(135deg, #F4A6C1 0%, #E8979D 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(244, 166, 193, 0.3);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(244, 166, 193, 0.4);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .instructions {
+            background: #FFF8F6;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border: 2px solid #F4A6C1;
+        }
+        .instructions h3 {
+            color: #2C2C2C;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+        .instructions ol {
+            color: #6B6B6B;
+            line-height: 2;
+            padding-left: 20px;
+        }
+        .instructions code {
+            background: #F4A6C1;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+            display: block;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💕 PWA Icon Generator</h1>
+        <p>Customize and generate beautiful PWA icons for your Valentine's Day app</p>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label>Icon Style:</label>
+                <select id="iconStyle" onchange="generateIcons()">
+                    <option value="heart">💕 Heart</option>
+                    <option value="hearts">💕💕 Two Hearts</option>
+                    <option value="initials">Initials (S & Your Initial)</option>
+                    <option value="love">LOVE Text</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>Background Color 1:</label>
+                <input type="color" id="color1" value="#F4A6C1" onchange="generateIcons()">
+            </div>
+            <div class="control-group">
+                <label>Background Color 2:</label>
+                <input type="color" id="color2" value="#E8979D" onchange="generateIcons()">
+            </div>
+            <div class="control-group">
+                <label>Accent Color:</label>
+                <input type="color" id="accentColor" value="#D4A574" onchange="generateIcons()">
+            </div>
+            <div class="control-group" id="initialsGroup" style="display: none;">
+                <label>Your Initial (for initials style):</label>
+                <input type="text" id="yourInitial" value="R" maxlength="1" onchange="generateIcons()" style="text-transform: uppercase;">
+            </div>
+        </div>
+        
+        <div class="canvas-container">
+            <div class="canvas-wrapper">
+                <canvas id="icon192" width="192" height="192"></canvas>
+                <div class="canvas-label">192x192</div>
+            </div>
+            <div class="canvas-wrapper">
+                <canvas id="icon512" width="512" height="512"></canvas>
+                <div class="canvas-label">512x512</div>
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <button onclick="generateIcons()">🔄 Regenerate</button>
+            <button onclick="download192()">⬇️ Download 192x192</button>
+            <button onclick="download512()">⬇️ Download 512x512</button>
+            <button onclick="downloadBoth()">⬇️ Download Both</button>
+        </div>
+        
+        <div id="status" class="status"></div>
+        
+        <div class="instructions">
+            <h3>📋 Instructions:</h3>
+            <ol>
+                <li>Customize the icon style, colors, and initials above</li>
+                <li>Icons update automatically when you change settings</li>
+                <li>Click "Download Both" to save both icon sizes</li>
+                <li>Move <code>icon-192.png</code> and <code>icon-512.png</code> to the <code>public/</code> folder</li>
+                <li>Your PWA will be ready to install on Android! 📱</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function drawHeart(ctx, x, y, size, fillColor) {
+            ctx.save();
+            ctx.fillStyle = fillColor;
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
+            ctx.shadowBlur = size * 0.05;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = size * 0.02;
+            
+            ctx.beginPath();
+            const topCurveHeight = size * 0.3;
+            ctx.moveTo(x, y + topCurveHeight);
+            // Left curve
+            ctx.bezierCurveTo(
+                x, y,
+                x - size / 2, y,
+                x - size / 2, y + topCurveHeight
+            );
+            // Left bottom curve
+            ctx.bezierCurveTo(
+                x - size / 2, y + (size + topCurveHeight) / 2,
+                x, y + (size + topCurveHeight) / 2,
+                x, y + size
+            );
+            // Right bottom curve
+            ctx.bezierCurveTo(
+                x, y + (size + topCurveHeight) / 2,
+                x + size / 2, y + (size + topCurveHeight) / 2,
+                x + size / 2, y + topCurveHeight
+            );
+            // Right curve
+            ctx.bezierCurveTo(
+                x + size / 2, y,
+                x, y,
+                x, y + topCurveHeight
+            );
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function drawIcon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, size, size);
+            
+            // Get settings
+            const style = document.getElementById('iconStyle').value;
+            const color1 = document.getElementById('color1').value;
+            const color2 = document.getElementById('color2').value;
+            const accentColor = document.getElementById('accentColor').value;
+            const yourInitial = document.getElementById('yourInitial').value.toUpperCase() || 'R';
+            
+            // Create gradient background
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, color1);
+            gradient.addColorStop(0.5, color2);
+            gradient.addColorStop(1, accentColor);
+            
+            // Draw rounded rectangle background
+            const radius = size * 0.15;
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.moveTo(radius, 0);
+            ctx.lineTo(size - radius, 0);
+            ctx.quadraticCurveTo(size, 0, size, radius);
+            ctx.lineTo(size, size - radius);
+            ctx.quadraticCurveTo(size, size, size - radius, size);
+            ctx.lineTo(radius, size);
+            ctx.quadraticCurveTo(0, size, 0, size - radius);
+            ctx.lineTo(0, radius);
+            ctx.quadraticCurveTo(0, 0, radius, 0);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Draw based on style
+            ctx.fillStyle = 'white';
+            
+            if (style === 'heart') {
+                const heartSize = size * 0.4;
+                const heartX = size / 2;
+                const heartY = size / 2;
+                drawHeart(ctx, heartX, heartY - heartSize * 0.1, heartSize, 'white');
+            } else if (style === 'hearts') {
+                const heartSize = size * 0.25;
+                const heartX1 = size / 2 - heartSize * 0.3;
+                const heartX2 = size / 2 + heartSize * 0.3;
+                const heartY = size / 2;
+                drawHeart(ctx, heartX1, heartY - heartSize * 0.1, heartSize, 'white');
+                drawHeart(ctx, heartX2, heartY - heartSize * 0.1, heartSize, 'white');
+            } else if (style === 'initials') {
+                ctx.font = `bold ${size * 0.35}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = 'white';
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+                ctx.shadowBlur = size * 0.02;
+                ctx.fillText('S', size / 2 - size * 0.15, size / 2);
+                ctx.fillText(yourInitial, size / 2 + size * 0.15, size / 2);
+            } else if (style === 'love') {
+                ctx.font = `bold ${size * 0.2}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = 'white';
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+                ctx.shadowBlur = size * 0.02;
+                ctx.fillText('LOVE', size / 2, size / 2);
+            }
+        }
+        
+        function generateIcons() {
+            try {
+                const canvas192 = document.getElementById('icon192');
+                const canvas512 = document.getElementById('icon512');
+                const style = document.getElementById('iconStyle').value;
+                
+                // Show/hide initials input
+                const initialsGroup = document.getElementById('initialsGroup');
+                if (style === 'initials') {
+                    initialsGroup.style.display = 'block';
+                } else {
+                    initialsGroup.style.display = 'none';
+                }
+                
+                if (!canvas192 || !canvas512) {
+                    showStatus('Error: Canvas elements not found', false);
+                    return;
+                }
+                
+                drawIcon(canvas192, 192);
+                drawIcon(canvas512, 512);
+                showStatus('✅ Icons generated successfully!', true);
+            } catch (error) {
+                showStatus('❌ Error generating icons: ' + error.message, false);
+                console.error(error);
+            }
+        }
+        
+        function downloadCanvas(canvas, filename) {
+            try {
+                canvas.toBlob(function(blob) {
+                    if (!blob) {
+                        showStatus('❌ Error creating file', false);
+                        return;
+                    }
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    showStatus(`✅ Downloaded ${filename}!`, true);
+                }, 'image/png');
+            } catch (error) {
+                showStatus('❌ Download error: ' + error.message, false);
+                console.error(error);
+            }
+        }
+        
+        function download192() {
+            const canvas = document.getElementById('icon192');
+            if (canvas) {
+                downloadCanvas(canvas, 'icon-192.png');
+            }
+        }
+        
+        function download512() {
+            const canvas = document.getElementById('icon512');
+            if (canvas) {
+                downloadCanvas(canvas, 'icon-512.png');
+            }
+        }
+        
+        function downloadBoth() {
+            download192();
+            setTimeout(() => {
+                download512();
+                setTimeout(() => {
+                    showStatus('✅ Both icons downloaded! Move them to the public/ folder.', true);
+                }, 500);
+            }, 500);
+        }
+        
+        function showStatus(message, isSuccess) {
+            const statusEl = document.getElementById('status');
+            if (statusEl) {
+                statusEl.textContent = message;
+                statusEl.className = 'status ' + (isSuccess ? 'success' : 'error');
+                setTimeout(() => {
+                    statusEl.className = 'status';
+                }, 5000);
+            }
+        }
+        
+        // Generate icons on load
+        window.addEventListener('load', function() {
+            setTimeout(generateIcons, 100);
+        });
+    </script>
+</body>
+</html>
