@@ -1,12 +1,26 @@
 {
-  "name": "Our Love Story",
-  "short_name": "Love Story",
-  "description": "A personalized Valentine's Day experience",
+  "name": "Together - Your Shared Life App",
+  "short_name": "Together",
+  "description": "Share memories, goals, and moments with loved ones. Perfect for couples, families, and friends.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#FFF8F6",
   "theme_color": "#F4A6C1",
   "orientation": "portrait",
-  "icons": []
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
 
